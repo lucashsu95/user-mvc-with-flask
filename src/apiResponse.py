@@ -17,3 +17,12 @@ def missing_fields():
 
 def password_too_short():
     return fail("MSG_PASSWORD_TOO_SHORT", 400)
+
+def invalid_login():
+    return fail("MSG_INVALID_LOGIN", 401)
+
+def invalid_access_token():
+    return fail("MSG_INVALID_ACCESS_TOKEN",401)
+
+def permission_deny():
+    return fail("MSG_PERMISSION_DENY", 403)

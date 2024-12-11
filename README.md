@@ -5,18 +5,22 @@
 ## 專案結構
 ```
 │  .gitignore
-│  apiResponse.py
-│  app.py
-│  controllers.py
-│  models.py
+│  LICENSE
 │  README.md
 │  requirements.txt
-│  seeder.py
 │
-└─templates
-        create.html
-        edit.html
-        index.html
+└─src
+    │  apiResponse.py
+    │  app.py
+    │  controllers.py
+    │  models.py
+    │  seeder.py
+    │
+    └─templates
+            create.html
+            edit.html
+            index.html
+            login.html
 ```
 
 ## 安裝與運行
@@ -52,38 +56,48 @@
 - `/create` - 創建新用戶頁面
 - `/edit/<int:id>` - 編輯用戶頁面
 - `/delete/<int:id>` - 刪除用戶功能
+- `/login` - 登入
+- `/logout` - 登出
 
 ## API
 
-1. `/api/users` GET
-2. `/api/users` POST
-3. `/api/users/{user-id}` GET
-4. `/api/users/{user-id}` PUT
-5. `/api/users/{user-id}` DELETE
+| # | URL | Method | Description |
+| --- | --- | --- | --- |
+| 1 | /api/users | GET | 獲取全部使用者 |
+| 2 | /api/users | POST | 新增使用者 |
+| 3 | /api/users/{user-id} | GET | 獲取使用者 |
+| 4 | /api/users/{user-id} | PUT | 更新使用者 |
+| 5 | /api/users/{user-id} | DELETE | 刪除使用者 |
+| 6 | /api/auth | POST    | 登入 |
+| 7 | /api/auth | DELETE  | 登出 |
 
 ## 文件說明
 
-- `app.py` - 應用程式的入口點，初始化數據庫並運行 `Flask` 應用程式。
-- `controllers.py` - 定義了所有的路由和相應的處理函數。
-- `models.py` - 定義了`User`數據庫模型。
-- `templates/` - 存放 HTML 模板文件。
-- `ApiResponse.py` - 回應格式
-- `seeder.py` - 為資料庫渲染假資料
+- `src/app.py` - 應用程式的入口點，初始化數據庫並運行 `Flask` 應用程式。
+- `src/controllers.py` - 定義了所有的路由和相應的處理函數。
+- `src/models.py` - 定義了`User`數據庫模型。
+- `src/apiResponse.py` - 回應格式
+- `src/seeder.py` - 為資料庫渲染假資料
+- `src/templates/` - 存放 HTML 模板文件。
 
 ## Feature
 `
 - [x] USER - CURD
 - [x] 新增password欄位
-- [ ] 檢查password是否大於8個字元
-- [ ] 新增login、logout功能
-- [ ] 實戶middleware
+- [x] 檢查password是否大於8個字元
+- [x] 新增login、logout功能
+- [x] 只能對自己修改、刪除
+- [ ] 實做middleware
 
 ## Libary
 
 - Python 3.13.0
 - Flask
 - flask_responses
+- flask_SQLAlchemy
 - flask_restful
+- flask_login
+- flask_cors
 
 ## 貢獻
 
