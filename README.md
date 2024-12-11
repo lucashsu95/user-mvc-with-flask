@@ -5,7 +5,7 @@
 ## 專案結構
 ```
 │  .gitignore
-│  ApiResponse.py
+│  apiResponse.py
 │  app.py
 │  controllers.py
 │  models.py
@@ -29,7 +29,7 @@
 
 2. 建立並啟動虛擬環境：
     ```bash
-    python -m venv venv
+    python -m venv .venv
     source venv/bin/activate  # Windows 使用者，請使用 `.venv\Scripts\activate`
     ```
 
@@ -38,7 +38,7 @@
     pip install -r requirements.txt
     ```
 
-4. 運行應用程式：
+4. 運行應用程式：****
     ```bash
     python app.py
     ```

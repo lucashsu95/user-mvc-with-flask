@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify,Re
 from models import db, User
 from flask_restful import Api, Resource
 from apiResponse import *
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 db.init_app(app)
 
