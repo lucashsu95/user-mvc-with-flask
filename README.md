@@ -40,7 +40,7 @@
 
 4. 運行應用程式：****
     ```bash
-    python app.py
+    python src/app.py
     ```
 
 5. 在瀏覽器中打開 `http://127.0.0.1:5000` 來訪問應用程式。
@@ -73,7 +73,8 @@
 ## Feature
 `
 - [x] USER - CURD
-- [ ] 新增password欄位
+- [x] 新增password欄位
+- [ ] 檢查password是否大於8個字元
 - [ ] 新增login、logout功能
 - [ ] 實戶middleware
 

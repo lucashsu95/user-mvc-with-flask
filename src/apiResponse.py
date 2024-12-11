@@ -15,3 +15,5 @@ def user_not_exists():
 def missing_fields():
     return fail("MSG_MISSING_FIELDS", 400)
 
+def password_too_short():
+    return fail("MSG_PASSWORD_TOO_SHORT", 400)

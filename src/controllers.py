@@ -3,8 +3,12 @@ from models import db, User
 from flask_restful import Api, Resource
 from apiResponse import *
 from flask_cors import CORS
+from werkzeug.security import check_password_hash,generate_password_hash
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+import os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 db.init_app(app)
@@ -12,14 +16,17 @@ db.init_app(app)
 @app.route('/')
 def index():
     users = User.query.all()
-    return render_template('index.html', users=users)
+    displayUsers = [user.to_dict() for user in users]
+    return render_template('index.html', users=displayUsers)
 
 @app.route('/create', methods=['GET', 'POST'])
 def create_user():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
-        new_user = User(name=name, email=email)
+        password = request.form['password']
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        new_user = User(name=name, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('index'))
@@ -27,10 +34,14 @@ def create_user():
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_user(id):
-    user = User.query.get_or_404(id)
+    user:User = User.query.get_or_404(id)
     if request.method == 'POST':
         user.name = request.form['name']
         user.email = request.form['email']
+        password = request.form['password']
+        if(password):
+            hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+            user.password = hashed_password
         db.session.commit()
         return redirect(url_for('index'))
     return render_template('edit.html', user=user)
@@ -40,6 +51,34 @@ def delete_user(id):
     user = User.query.get_or_404(id)
     db.session.delete(user)
     db.session.commit()
+    return redirect(url_for('index'))
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+        is_correct = check_password_hash(user.passwordHash, password)
+        
+        if user and is_correct:
+            login_user(user)
+            return redirect(url_for('index'))
+        return 'Invalid credentials'
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
     return redirect(url_for('index'))
 
 # <--------------------------------------API-------------------------------------->
