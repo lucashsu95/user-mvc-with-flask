@@ -71,6 +71,35 @@
 | 6 | /api/auth | POST    | 登入 |
 | 7 | /api/auth | DELETE  | 登出 |
 
+### `/api/users` POST
+
+```json
+{
+  "email":"user11@web.tw",
+  "password":"user11pass",
+  "name":"user11"
+}
+```
+
+### `/api/users` PUT
+
+```json
+{
+  "email?":"user11@web.tw",
+  "password?":"user11pass",
+  "name?":"user11 - t"
+}
+```
+
+### `/api/auth` POST
+
+```json
+{
+  "email":"user1@web.tw",
+  "password":"user1pass",
+}
+```
+
 ## 文件說明
 
 - `src/app.py` - 應用程式的入口點，初始化數據庫並運行 `Flask` 應用程式。
