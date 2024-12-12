@@ -81,13 +81,13 @@
 }
 ```
 
-### `/api/users` PUT
+### `/api/users/{user-id}` PUT
 
 ```json
 {
-  "email?":"user11@web.tw",
-  "password?":"user11pass",
-  "name?":"user11 - t"
+  "email"?:"user11@web.tw",
+  "password"?:"user11pass",
+  "name"?:"user11 - t"
 }
 ```
 
