@@ -71,12 +71,12 @@
 }
 ```
 
-### `/api/users` PUT
+### `/api/users/{user-id}` PUT
 
 ```json
 {
-  "email?":"user11@web.tw",
-  "name?":"user11 - t"
+  "email"?:"user11@web.tw",
+  "name"?:"user11 - t"
 }
 ```
 
