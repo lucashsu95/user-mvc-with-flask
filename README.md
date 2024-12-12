@@ -61,6 +61,25 @@
 4. `/api/users/{user-id}` PUT
 5. `/api/users/{user-id}` DELETE
 
+
+### `/api/users` POST
+
+```json
+{
+  "email":"user11@web.tw",
+  "name":"user11"
+}
+```
+
+### `/api/users` PUT
+
+```json
+{
+  "email?":"user11@web.tw",
+  "name?":"user11 - t"
+}
+```
+
 ## 文件說明
 
 - `app.py` - 應用程式的入口點，初始化數據庫並運行 `Flask` 應用程式。
