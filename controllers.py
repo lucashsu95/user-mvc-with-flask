@@ -17,8 +17,16 @@ def index():
 @app.route('/create', methods=['GET', 'POST'])
 def create_user():
     if request.method == 'POST':
+
+        if ('name' not in request.form or 'email' not in request.form) or (request.form['name'] == "" or request.form['email'] == ""):
+            return missing_fields()
+        
         name = request.form['name']
         email = request.form['email']
+
+        if(User.query.filter_by(email=email).first()):
+            return email_exists()
+        
         new_user = User(name=name, email=email)
         db.session.add(new_user)
         db.session.commit()
@@ -66,7 +74,7 @@ class UserAPI(Resource):
     def post(self):
         data = request.get_json()
 
-        if 'name' not in data or 'email' not in data:
+        if ('name' not in data or 'email' not in data) or (data['name'] == "" or data['email'] == ""):
             return missing_fields()
         
         if User.query.filter_by(email=data['email']).first():
@@ -84,8 +92,12 @@ class UserAPI(Resource):
     
         data = request.get_json()
         if 'name' in data:
+            if data['name'] == "":
+                return missing_fields()
             user.name = data['name']
         if 'email' in data:
+            if data['email'] == "":
+                return missing_fields()
             user.email = data['email']
         db.session.commit()
         return success(user.to_dict(), 201)
