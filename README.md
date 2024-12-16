@@ -32,6 +32,15 @@
     python -m venv .venv
     source venv/bin/activate  # Windows 使用者，請使用 `.venv\Scripts\activate`
     ```
+    若要退出虛擬環境，可以在終端機中執行以下命令：
+    - 在 Windows 上：
+      ```sh
+      deactivate
+      ```
+    - 在 macOS 和 Linux 上：
+      ```sh
+      deactivate
+      ```
 
 3. 安裝所需的套件：
     ```bash
@@ -45,6 +54,14 @@
 
 5. 在瀏覽器中打開 `http://127.0.0.1:5000` 來訪問應用程式。
 
+### 使用Docker
+
+```bash
+docker run -it -v ".:/app" -p 5000:5000 --name user-flask python:3.10 bash
+cd app
+pip install -r requirements.txt
+python app.py
+```
 
 ## 路由
 
