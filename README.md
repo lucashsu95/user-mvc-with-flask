@@ -5,6 +5,7 @@
 ## 專案結構
 ```
 │  .gitignore
+│  Dockerfile
 │  LICENSE
 │  README.md
 │  requirements.txt
