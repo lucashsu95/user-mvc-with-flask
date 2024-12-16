@@ -5,18 +5,22 @@
 ## 專案結構
 ```
 │  .gitignore
-│  apiResponse.py
-│  app.py
-│  controllers.py
-│  models.py
+│  Dockerfile
+│  LICENSE
 │  README.md
 │  requirements.txt
-│  seeder.py
 │
-└─templates
-        create.html
-        edit.html
-        index.html
+└─src
+    │  apiResponse.py
+    │  app.py
+    │  controllers.py
+    │  models.py
+    │  seeder.py
+    │
+    └─templates
+            create.html
+            edit.html
+            index.html
 ```
 
 ## 安裝與運行
@@ -44,7 +48,7 @@
 
 4. 運行應用程式：****
     ```bash
-    python app.py
+    python src/app.py
     ```
 
 5. 在瀏覽器中打開 `http://127.0.0.1:5000` 來訪問應用程式。
@@ -98,12 +102,12 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 
 ## 文件說明
 
-- `app.py` - 應用程式的入口點，初始化數據庫並運行 `Flask` 應用程式。
-- `controllers.py` - 定義了所有的路由和相應的處理函數。
-- `models.py` - 定義了`User`數據庫模型。
+- `src/app.py` - 應用程式的入口點，初始化數據庫並運行 `Flask` 應用程式。
+- `src/controllers.py` - 定義了所有的路由和相應的處理函數。
+- `src/models.py` - 定義了`User`數據庫模型。
+- `src/apiResponse.py` - 回應格式
+- `src/seeder.py` - 為資料庫渲染假資料
 - `templates/` - 存放 HTML 模板文件。
-- `ApiResponse.py` - 回應格式
-- `seeder.py` - 為資料庫渲染假資料
 
 ## Feature
 `
