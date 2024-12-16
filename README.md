@@ -107,7 +107,7 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 - `src/models.py` - 定義了`User`數據庫模型。
 - `src/apiResponse.py` - 回應格式
 - `src/seeder.py` - 為資料庫渲染假資料
-- `templates/` - 存放 HTML 模板文件。
+- `src/templates/` - 存放 HTML 模板文件。
 
 ## Feature
 `
