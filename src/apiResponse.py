@@ -1,10 +1,10 @@
 from flask_responses import json_response
 
 def success(data, status_code):
-    return json_response({"success":True,"data":data ,"message":""}, status_code=status_code)
+    return json_response({"success":True,"data":data }, status_code=status_code)
 
 def fail(message, status_code):
-    return json_response({"success":False,"data":None ,"message":message}, status_code=status_code)
+    return json_response({"success":False,"message":message}, status_code=status_code)
 
 def email_exists():
     return fail("MSG_EMAIL_EXISTS", 400)
