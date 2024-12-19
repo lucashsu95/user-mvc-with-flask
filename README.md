@@ -53,9 +53,9 @@
     python src/app.py
     ```
 
-5. 在瀏覽器中打開 `http://127.0.0.1:5000` 來訪問應用程式。
-6. 在瀏覽器中打開 `http://127.0.0.1:5000/api` 來使用api。
-7. 在瀏覽器中打開`http://127.0.0.1:5000/apidocs` 來查看api文件。
+5. 在瀏覽器中打開 http://127.0.0.1:5000 來訪問應用程式。
+6. 在瀏覽器中打開 http://127.0.0.1:5000/api 來使用api。
+7. 在瀏覽器中打開 http://127.0.0.1:5000/apidocs 來查看api文件。
 
 ### 使用Docker
 
@@ -66,8 +66,8 @@ docker run -it --rm -v ".:/app" -p 5000:5000 ghcr.io/lucashsu95/user-mvc-with-fl
 
 #### 親手build
 ```bash
-docker build -t user-mvc-with-flask .
-docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
+docker build -t user-mvc-with-flask-login .
+docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask-login
 ```
 
 ## API 資料格式
@@ -80,7 +80,7 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 | access_token:String | 使用者的登入 token，只有在登入 API 時顯示，其餘時候不得存在 |
 
 ## API. 1 使用者登入
-使用者輸入正確的帳號密碼後需回傳 access_token
+使用者輸入正確的帳號密碼後需回傳 `access_token`
 
 **POST `/api/auth`**
 
@@ -154,16 +154,37 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 }
 ```
 
-<!-- 
-### `/api/users/{user-id}` PUT
+## API. 6 更新使用者
 
+**`/api/users/{user-id}` PUT**
+
+**Request Body**
 ```json
 {
-  "email"?:"user11@web.tw",
-  "password"?:"user11pass",
-  "name"?:"user11 - t"
+  "email?":"user11@web.tw",
+  "password?":"user11pass",
+  "name?":"user11 - t"
 }
-``` -->
+```
+**Response Body**
+```json
+{
+  "success": true,
+  "data": "User"
+}
+```
+
+## API. 7 刪除使用者
+
+**`/api/users/{user-id}` DELETE**
+
+**Response Body**
+```json
+{
+  "success": true,
+  "data": ""
+}
+```
 
 ## 錯誤訊息列表
 
