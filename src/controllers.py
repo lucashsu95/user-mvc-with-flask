@@ -8,6 +8,7 @@ from werkzeug.security import check_password_hash,generate_password_hash
 import jwt
 import datetime
 import os
+from flasgger import Swagger
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -36,7 +37,7 @@ def create_user():
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_user(id):
-    user:User = User.query.get_or_404(id)
+    user: User = User.query.get_or_404(id)
     if request.method == 'POST':
         user.name = request.form['name']
         user.email = request.form['email']
@@ -121,6 +122,21 @@ def get_user_or_404(user_id):
 
 class UserAPI(Resource):
     def get(self, id=None):
+        """
+        Get user(s)
+        ---
+        tags:
+          - Users
+        parameters:
+          - name: id
+            in: path
+            type: integer
+            required: false
+            description: The user's ID
+        responses:
+          200:
+            description: A list of users or a single user
+        """
         if id is None:
             users = User.query.all()
             return success([user.to_dict() for user in users], 200)
@@ -131,6 +147,28 @@ class UserAPI(Resource):
         return success(user.to_dict(), 200)
 
     def post(self):
+        """
+        Create a new user
+        ---
+        tags:
+          - Users
+        parameters:
+          - name: body
+            in: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+        responses:
+          201:
+            description: The created user
+        """
         data = request.get_json()
 
         if 'name' not in data or 'email' not in data or 'password' not in data:
@@ -148,6 +186,33 @@ class UserAPI(Resource):
         return success(new_user.to_dict(), 201)
     
     def put(self, id):
+        """
+        Update an existing user
+        ---
+        tags:
+          - Users
+        parameters:
+          - name: id
+            in: path
+            type: integer
+            required: true
+            description: The user's ID
+          - name: body
+            in: body
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+        responses:
+          201:
+            description: The updated user
+        """
         # 檢查有沒有 access token, 並且檢查 token 是否有效
         error, existsUser = check_authorization()
         if error:
@@ -174,6 +239,21 @@ class UserAPI(Resource):
         return success(user.to_dict(), 201)
     
     def delete(self, id):
+        """
+        Delete a user
+        ---
+        tags:
+          - Users
+        parameters:
+          - name: id
+            in: path
+            type: integer
+            required: true
+            description: The user's ID
+        responses:
+          204:
+            description: No content
+        """
         error, existsUser = check_authorization()
         if error:
             return error
@@ -193,6 +273,28 @@ class UserAPI(Resource):
 
 class AuthAPI(Resource):
     def post(self):
+        """
+        User login
+        ---
+        tags:
+          - Auth
+        parameters:
+          - name: body
+            in: body
+            required: true
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+        responses:
+          200:
+            description: The logged-in user with access token
+          401:
+            description: Invalid login
+        """
         data = request.get_json()
         if 'email' not in data or 'password' not in data:
             return missing_fields()
@@ -215,6 +317,15 @@ class AuthAPI(Resource):
         return invalid_login()
 
     def delete(self):
+        """
+        User logout
+        ---
+        tags:
+          - Auth
+        responses:
+          204:
+            description: No content
+        """
         logout_user()
         error, existsUser = check_authorization()
         if error:
@@ -224,10 +335,20 @@ class AuthAPI(Resource):
         return success("", 204)
     
     def get(self):
+        """
+        Get all users
+        ---
+        tags:
+          - Users
+        responses:
+          200:
+            description: A list of users
+        """
         users = User.query.all()
         return success([user.to_all() for user in users], 200)
 
 
 api = Api(app)
+swagger = Swagger(app)
 api.add_resource(UserAPI, '/api/users', '/api/users/<int:id>')
 api.add_resource(AuthAPI, '/api/auth')
