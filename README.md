@@ -57,7 +57,7 @@
 
 #### 使用現成
 ```bash
-docker run -it --rm -v ".:/app" -p 5000:5000 lucashsu95/user-mvc-with-flask:latest
+docker run -it --rm -v ".:/app" -p 5000:5000 lucashsu95/user-mvc-with-flask:0.0.1
 ```
 
 #### 親手build
