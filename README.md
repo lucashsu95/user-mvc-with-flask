@@ -46,24 +46,24 @@
     pip install -r requirements.txt
     ```
 
-4. 運行應用程式：****
+4. 運行應用程式：
     ```bash
     python src/app.py
     ```
 
-5. 在瀏覽器中打開 `http://127.0.0.1:5000` 來訪問應用程式。
+5. 在瀏覽器中打開 http://127.0.0.1:5000 來訪問應用程式。
 
 ### 使用Docker
 
 #### 使用現成
 ```bash
-docker run -it --rm -v ".:/app" -p 5000:5000 lucashsu95/user-mvc-with-flask:0.0.1
+docker run -it --rm -v ".:/app" -p 5000:5000 lucashsu95/user-mvc-flask-curd
 ```
 
 #### 親手build
 ```bash
-docker build -t user-mvc-with-flask .
-docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
+docker build -t user-mvc-with-flask-curd .
+docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask-curd
 ```
 
 ## 路由
@@ -95,8 +95,8 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 
 ```json
 {
-  "email"?:"user11@web.tw",
-  "name"?:"user11 - t"
+  "email":"user11@web.tw",
+  "name":"user11 - t"
 }
 ```
 
