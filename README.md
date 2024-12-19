@@ -1,6 +1,6 @@
 # User CURD MVC with Flask
 
-這是一個使用 Flask 框架構建的簡單用戶管理應用程式。應用程式允許用戶創建、編輯和刪除用戶。
+這是一個使用 Flask 框架構建的簡單用戶管理應用程式。應用程式允許用戶創建、編輯、刪除、登入和登出用戶。
 
 ## 專案結構
 ```
@@ -87,16 +87,16 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 
 ```json
 {
-  "email": String,
-  "password": String,
+  "email": "String",
+  "password": "String",
 }
 ```
 
 **Response Body**
 ```json
 {
-  "success":true,
-  "data":User,
+  "success": true,
+  "data": "User",
 }
 ```
 
@@ -107,7 +107,7 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 **Response Body**
 ```json
 {
-  "success":true,
+  "success": true,
 }
 ```
 
@@ -119,7 +119,7 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 ```json
 {
   "success": true,
-  "data": User[]
+  "data": "User[]"
 }
 ```
 ## API. 4 新增使用者
@@ -129,16 +129,16 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 **Request Body**
 ```json
 {
-  "email": String,
-  "password": String,
-  "name": String
+  "email": "String",
+  "password": "String",
+  "name": "String"
 }
 ```
 **Response Body**
 ```json
 {
   "success": true,
-  "data": User
+  "data": "User"
 }
 ```
 ## API. 5 獲取使用者
@@ -149,7 +149,7 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask
 ```json
 {
   "success": true,
-  "data": User
+  "data": "User"
 }
 ```
 
