@@ -26,6 +26,7 @@
 
 ## 安裝與運行
 
+### 使用本地python
 1. 克隆此專案到本地端：
     ```bash
     git clone https://github.com/lucashsu95/user-mvc-with-flask.git
@@ -60,7 +61,7 @@
 
 #### 使用現成
 ```bash
-docker run -it --rm -v ".:/app" -p 5000:5000 lucashsu95/user-mvc-with-flask:latest
+docker run -it --rm -v ".:/app" -p 5000:5000 ghcr.io/lucashsu95/user-mvc-with-flask:a1824d8417c9312140136705bc7b414cfb420450
 ```
 
 #### 親手build
