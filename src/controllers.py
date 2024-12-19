@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
-from flask_restful import Api,Resource
+from flask_restful import Api, Resource
 from flask_cors import CORS
 from flask_login import LoginManager, login_user, logout_user, login_required
 from models import db, User
 from apiResponse import *
-from werkzeug.security import check_password_hash,generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 import jwt
 import datetime
 import os
@@ -15,6 +15,14 @@ app.secret_key = os.urandom(24)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 db.init_app(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route('/')
 def index():
@@ -37,12 +45,12 @@ def create_user():
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_user(id):
-    user: User = User.query.get_or_404(id)
+    user = User.query.get_or_404(id)
     if request.method == 'POST':
         user.name = request.form['name']
         user.email = request.form['email']
         password = request.form['password']
-        if(password):
+        if password:
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
             user.password = hashed_password
         db.session.commit()
@@ -55,14 +63,6 @@ def delete_user(id):
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('index'))
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -168,13 +168,10 @@ class UserAPI(Resource):
             description: MSG_EMAIL_EXISTS
         """
         data = request.get_json()
-
         if 'name' not in data or 'email' not in data or 'password' not in data:
             return missing_fields()
-        
         if User.query.filter_by(email=data['email']).first():
             return email_exists()
-        
         if len(data['password']) < 8:
             return password_too_short()
         
@@ -182,7 +179,6 @@ class UserAPI(Resource):
         db.session.add(new_user)
         db.session.commit()
         return success(new_user.to_dict(), 201)
-    
     
 class UserDetailAPI(Resource):
     def get(self, id):
@@ -257,16 +253,11 @@ class UserDetailAPI(Resource):
         error, existsUser = check_authorization()
         if error:
             return error
-
-        # 檢查 user 是否存在
         error, user = get_user_or_404(id)
         if error:
             return error
-
-        # 只有自己才可以修改
         if user.id != existsUser.id:
             return permission_deny()
-        
         data = request.get_json()
         if 'name' in data:
             user.name = data['name']
@@ -308,19 +299,14 @@ class UserDetailAPI(Resource):
         error, existsUser = check_authorization()
         if error:
             return error
-
         error, user = get_user_or_404(id)
         if error:
             return error
-
-        # 只有自己才可以刪除
         if user.id != existsUser.id:
             return permission_deny()
-        
         db.session.delete(user)
         db.session.commit()
         return success("", 204)
-
 
 class AuthAPI(Resource):
     def post(self):
@@ -354,19 +340,15 @@ class AuthAPI(Resource):
         data = request.get_json()
         if 'email' not in data or 'password' not in data:
             return missing_fields()
-        
         user = User.query.filter_by(email=data['email']).first()
         if user and check_password_hash(user.passwordHash, data['password']):
             login_user(user)
-            
             token = jwt.encode({
                 'user_id': user.id,
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
             }, app.config['SECRET_KEY'], algorithm='HS256')
-            
             user.access_token = token
             db.session.commit()
-            
             response = user.to_dict()
             response['access_token'] = token
             return success(response, 200)
@@ -413,8 +395,8 @@ swagger_config = {
         {
             'endpoint': 'apispec_1',
             'route': '/apispec_1.json',
-            'rule_filter': lambda rule: True,  # all in
-            'model_filter': lambda tag: True,  # all in
+            'rule_filter': lambda rule: True,
+            'model_filter': lambda tag: True,
         }
     ],
     'static_url_path': '/flasgger_static',
