@@ -61,7 +61,7 @@
 
 #### 使用現成
 ```bash
-docker run -it --rm -v ".:/app" -p 5000:5000 ghcr.io/lucashsu95/user-mvc-with-flask:a1824d8417c9312140136705bc7b414cfb420450
+docker run -it --rm -v ".:/app" -p 5000:5000 lucas0423/user-mvc-flask-login
 ```
 
 #### 親手build
