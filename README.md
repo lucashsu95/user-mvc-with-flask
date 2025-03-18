@@ -1,6 +1,6 @@
 # User CURD MVC with Flask
 
-這是一個使用 Flask 框架構建的簡單用戶管理應用程式。應用程式允許用戶創建、編輯和刪除用戶。
+這是一個使用 Flask 框架構建的簡單用戶管理應用程式。應用程式允許**用戶創建、編輯和刪除用戶**。
 
 ## 專案結構
 ```
@@ -25,6 +25,26 @@
 
 ## 安裝與運行
 
+### 使用Docker
+
+先cd進資料夾
+```bash
+cd user-mvc-with-flask
+```
+
+#### 使用現成
+```bash
+docker run -it --rm -v ".:/app" -p 5000:5000 lucas0423/user-mvc-flask-curd
+```
+
+#### 親手build
+```bash
+docker build -t user-mvc-with-flask-curd .
+docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask-curd
+```
+
+
+### 在本地
 1. 克隆此專案到本地端：
     ```bash
     git clone https://github.com/lucashsu95/user-mvc-with-flask.git
@@ -51,54 +71,111 @@
     python src/app.py
     ```
 
-5. 在瀏覽器中打開 http://127.0.0.1:5000 來訪問應用程式。
+## 訪問
+- 在瀏覽器中打開 http://127.0.0.1:5000 來訪問應用程式。
+- 在瀏覽器中打開 http://127.0.0.1:5000/api 來使用api。
+- 在瀏覽器中打開 http://127.0.0.1:5000/apidocs 來查看api文件。
 
-### 使用Docker
+## API 資料格式
 
-#### 使用現成
-```bash
-docker run -it --rm -v ".:/app" -p 5000:5000 lucashsu95/user-mvc-flask-curd
-```
-
-#### 親手build
-```bash
-docker build -t user-mvc-with-flask-curd .
-docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask-curd
-```
-
-## 路由
-
-- `/` - 用戶列表頁面
-- `/create` - 創建新用戶頁面
-- `/edit/<int:id>` - 編輯用戶頁面
-- `/delete/<int:id>` - 刪除用戶功能
-
-## API
-
-1. `/api/users` GET
-2. `/api/users` POST
-3. `/api/users/{user-id}` GET
-4. `/api/users/{user-id}` PUT
-5. `/api/users/{user-id}` DELETE
+| User                | 使用者                                                      |
+| ------------------- | ----------------------------------------------------------- |
+| id: Number          | 使用者 id，唯一值                                           |
+| email: String       | 使用者的 email，唯一值                                      |
+| name: String         | 使用者的暱稱                                                |
 
 
-### `/api/users` POST
+## API. 1 查看使用者列表
+不應回傳 User 的 access_token
+**GET `/api/users`**
 
+**Response Body**
 ```json
 {
-  "email":"user11@web.tw",
-  "name":"user11"
+  "success": true,
+  "data": "User[]"
+}
+```
+## API. 2 新增使用者
+
+**POST `/api/users`**
+
+**Request Body**
+```json
+{
+  "email": "String",
+  "password": "String",
+  "name": "String"
+}
+```
+**Response Body**
+```json
+{
+  "success": true,
+  "data": "User"
+}
+```
+## API. 3 獲取使用者
+
+**GET `/api/users/{user-id}`**
+
+**Response Body**
+```json
+{
+  "success": true,
+  "data": "User"
 }
 ```
 
-### `/api/users/{user-id}` PUT
+## API. 4 更新使用者
 
+**`/api/users/{user-id}` PUT**
+
+**Request Body**
 ```json
 {
-  "email":"user11@web.tw",
-  "name":"user11 - t"
+  "email?":"user11@web.tw",
+  "password?":"user11pass",
+  "name?":"user11 - t"
 }
 ```
+**Response Body**
+```json
+{
+  "success": true,
+  "data": "User"
+}
+```
+
+## API. 5 刪除使用者
+
+**`/api/users/{user-id}` DELETE**
+
+**Response Body**
+```json
+{
+  "success": true,
+  "data": ""
+}
+```
+
+## 錯誤訊息列表
+
+| #   | 訊息                     | 狀態碼 | 情境                     | 適用API |
+| --- | ------------------------ | ------ | ------------------------ | ------- |
+| 1   | MSG_EMAIL_EXISTS         | 400    | 使用者已存在(Email 重複) | 2       |
+| 2   | MSG_USER_NOT_EXISTS      | 404    | 不存在的使用者           | 3, 4, 5       |
+| 3   | MSG_MISSING_FIELDS       | 400    | 缺少必要欄位             | 2       |
+
+## API Endpoints
+
+| #   | URL                  | Method | Description    |
+| --- | -------------------- | ------ | -------------- |
+| 1   | /api/users           | GET    | 查看使用者列表 |
+| 2   | /api/users           | POST   | 新增使用者     |
+| 3   | /api/users/{user-id} | GET    | 獲取使用者     |
+| 4   | /api/users/{user-id} | PUT    | 更新使用者     |
+| 5   | /api/users/{user-id} | DELETE | 刪除使用者     |
 
 ## 文件說明
 
@@ -108,6 +185,13 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask-curd
 - `src/apiResponse.py` - 回應格式
 - `src/seeder.py` - 為資料庫渲染假資料
 - `src/templates/` - 存放 HTML 模板文件。
+
+## 現成路由
+
+- `/` - 用戶列表頁面
+- `/create` - 創建新用戶頁面
+- `/edit/<int:id>` - 編輯用戶頁面
+- `/delete/<int:id>` - 刪除用戶功能
 
 ## Feature
 `

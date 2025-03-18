@@ -166,8 +166,6 @@ class UserDetailAPI(Resource):
         responses:
           200:
             description: User updated successfully
-          400:
-            description: MSG_MISSING_FIELDS
           404:
             description: MSG_USER_NOT_EXISTS
         """
@@ -199,20 +197,9 @@ class UserDetailAPI(Resource):
             type: integer
             required: true
             description: The user's ID
-          - name: body
-            in: body
-            required: true
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-
         responses:
-          200:
-            description: User updated successfully
+          204:
+            description: User delete successfully
           400:
             description: MSG_MISSING_FIELDS
           404:
