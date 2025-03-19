@@ -59,7 +59,13 @@
 
 ### 使用Docker
 
+先進入資料夾
+```bash
+cd user-mvc-with-flask
+```
+
 #### 使用現成
+
 ```bash
 docker run -it --rm -v ".:/app" -p 5000:5000 lucas0423/user-mvc-flask-login
 ```
@@ -76,8 +82,8 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask-login
 | ------------------- | ----------------------------------------------------------- |
 | id: Number          | 使用者 id，唯一值                                           |
 | email: String       | 使用者的 email，唯一值                                      |
-| name:String         | 使用者的暱稱                                                |
-| access_token:String | 使用者的登入 token，只有在登入 API 時顯示，其餘時候不得存在 |
+| name: String         | 使用者的暱稱                                                |
+| access_token: String | 使用者的登入 token，只有在登入 API 時顯示，其餘時候不得存在 |
 
 ## API. 1 使用者登入
 使用者輸入正確的帳號密碼後需回傳 `access_token`
