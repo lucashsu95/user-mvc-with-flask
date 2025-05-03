@@ -65,11 +65,7 @@ class UserAPI(Resource):
           201:
             description: The created user
           400:
-            description: MSG_PASSWORD_TOO_SHORT
-          400:
-            description: MSG_MISSING_FIELDS
-          400:
-            description: MSG_EMAIL_EXISTS
+            description: MSG_PASSWORD_TOO_SHORT、MSG_MISSING_FIELDS、MSG_EMAIL_EXISTS
         """
         data = request.get_json()
         if 'name' not in data or 'email' not in data or 'password' not in data:
@@ -140,9 +136,7 @@ class UserDetailAPI(Resource):
           200:
             description: User updated successfully
           400:
-            description: MSG_MISSING_FIELDS
-          400:
-            description: MSG_PASSWORD_TOO_SHORT
+            description: MSG_MISSING_FIELDS、MSG_PASSWORD_TOO_SHORT
           401:
             description: MSG_INVALID_ACCESS_TOKEN
           403:
@@ -262,6 +256,8 @@ class AuthAPI(Resource):
         responses:
           204:
             description: No content
+          401:
+            description: MSG_INVALID_ACCESS_TOKEN
         """
         logout_user()
         error, existsUser = check_authorization()
