@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>創建用戶</title>
+    <style>
+        .error {
+            color: red;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
     <h1>創建新用戶</h1>
+    
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    
     <form method="POST">
-        姓名: <input type="text" name="name" required><br>
-        Email: <input type="email" name="email" required><br>
-        Password: <input type="password" name="password" required><br>
+        姓名: <input type="text" name="name"><br>
+        Email: <input type="email" name="email"><br>
+        Password: <input type="password" name="password"><br>
         <input type="submit" value="提交">
     </form>
 </body>

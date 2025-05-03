@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_restful import Api, Resource
 from flask_cors import CORS
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import db, User
 from apiResponse import *
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -36,46 +36,101 @@ def create_user():
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
+        
+        # 檢查所有必要欄位
+        if not name or not email or not password:
+            error = "所有欄位都是必填的"
+            return render_template('create.html', error=error)
+        
+        # 檢查email是否已存在
+        if User.query.filter_by(email=email).first():
+            error = "此電子郵件已被註冊"
+            return render_template('create.html', error=error)
+        
+        # 檢查密碼長度
+        if len(password) < 8:
+            error = "密碼長度必須至少8個字符"
+            return render_template('create.html', error=error)
+        
+        # 建立新用戶
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        new_user = User(name=name, email=email, password=hashed_password)
+        new_user = User(name=name, email=email, passwordHash=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('index'))
+        
     return render_template('create.html')
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_user(id):
-    user = User.query.get_or_404(id)
-    if request.method == 'POST':
-        user.name = request.form['name']
-        user.email = request.form['email']
-        password = request.form['password']
-        if password:
-            hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-            user.password = hashed_password
-        db.session.commit()
+    try:
+        user = User.query.get_or_404(id)
+        
+        # 檢查當前用戶是否為要編輯的用戶
+        if not current_user.is_authenticated or current_user.id != user.id:
+            flash("您沒有權限編輯此用戶")
+            return redirect(url_for('index'))
+            
+        if request.method == 'POST':
+            user.name = request.form['name']
+            user.email = request.form['email']
+            password = request.form['password']
+            
+            if password:
+                if len(password) < 8:
+                    return render_template('edit.html', user=user, error="密碼長度必須至少8個字符")
+                    
+                hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+                user.passwordHash = hashed_password
+                
+            db.session.commit()
+            flash("用戶資料已更新")
+            return redirect(url_for('index'))
+            
+        return render_template('edit.html', user=user)
+    except Exception as e:
+        db.session.rollback()
+        flash(f"發生錯誤: {str(e)}")
         return redirect(url_for('index'))
-    return render_template('edit.html', user=user)
 
 @app.route('/delete/<int:id>')
+@login_required
 def delete_user(id):
-    user = User.query.get_or_404(id)
-    db.session.delete(user)
-    db.session.commit()
-    return redirect(url_for('index'))
-
+    try:
+        user = User.query.get_or_404(id)
+        
+        # 檢查當前用戶是否為要刪除的用戶
+        if not current_user.is_authenticated or current_user.id != user.id:
+            flash("您沒有權限刪除此用戶")
+            return redirect(url_for('index'))
+            
+        db.session.delete(user)
+        db.session.commit()
+        flash("用戶已刪除")
+        return redirect(url_for('index'))
+    except Exception as e:
+        db.session.rollback()
+        flash(f"發生錯誤: {str(e)}")
+        return redirect(url_for('index'))
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
+        
+        # 檢查用戶是否存在
+        if not user:
+            return render_template('login.html', error="用戶不存在")
+            
+        # 檢查密碼是否正確
         is_correct = check_password_hash(user.passwordHash, password)
         
-        if user and is_correct:
+        if is_correct:
             login_user(user)
             return redirect(url_for('index'))
-        return 'Invalid credentials'
+        return render_template('login.html', error="帳號或密碼錯誤")
     return render_template('login.html')
 
 @app.route('/logout')

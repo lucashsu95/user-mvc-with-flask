@@ -1,4 +1,4 @@
-# User CURD MVC with Flask
+# User Login MVC with Flask
 
 這是一個使用 Flask 框架構建的簡單用戶管理應用程式。應用程式允許用戶創建、編輯、刪除、登入和登出用戶。
 
@@ -25,6 +25,25 @@
 ```
 
 ## 安裝與運行
+
+
+### 使用Docker
+
+先進入資料夾
+```bash
+cd user-mvc-with-flask
+```
+
+#### 使用現成
+```bash
+docker run -it --rm -v ".:/app" -p 5000:5000 lucas0423/user-mvc-flask-login
+```
+
+#### 親手build
+```bash
+docker build -t user-mvc-with-flask-login .
+docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask-login
+```
 
 ### 使用本地python
 1. 克隆此專案到本地端：
@@ -53,28 +72,10 @@
     python src/app.py
     ```
 
-5. 在瀏覽器中打開 http://127.0.0.1:5000 來訪問應用程式。
-6. 在瀏覽器中打開 http://127.0.0.1:5000/api 來使用api。
-7. 在瀏覽器中打開 http://127.0.0.1:5000/apidocs 來查看api文件。
-
-### 使用Docker
-
-先進入資料夾
-```bash
-cd user-mvc-with-flask
-```
-
-#### 使用現成
-
-```bash
-docker run -it --rm -v ".:/app" -p 5000:5000 lucas0423/user-mvc-flask-login
-```
-
-#### 親手build
-```bash
-docker build -t user-mvc-with-flask-login .
-docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask-login
-```
+## 訪問
+- 在瀏覽器中打開 http://127.0.0.1:5000 來訪問應用程式。
+- 在瀏覽器中打開 http://127.0.0.1:5000/api 來使用api。
+- 在瀏覽器中打開 http://127.0.0.1:5000/apidocs 來查看api文件。
 
 ## API 資料格式
 
@@ -197,12 +198,12 @@ docker run -it --rm -v ".:/app" -p 5000:5000 user-mvc-with-flask-login
 | #   | 訊息                     | 狀態碼 | 情境                     | 適用API |
 | --- | ------------------------ | ------ | ------------------------ | ------- |
 | 1   | MSG_EMAIL_EXISTS         | 400    | 使用者已存在(Email 重複) | 4       |
-| 2   | MSG_USER_NOT_EXISTS      | 404    | 不存在的使用者           | 5       |
-| 3   | MSG_MISSING_FIELDS       | 400    | 缺少必要欄位             | 3       |
-| 4   | MSG_PASSWORD_TOO_SHORT   | 400    | 密碼長度不足             | 3,6     |
+| 2   | MSG_USER_NOT_EXISTS      | 404    | 不存在的使用者           | 5, 6, 7       |
+| 3   | MSG_MISSING_FIELDS       | 400    | 缺少必要欄位             | 4       |
+| 4   | MSG_PASSWORD_TOO_SHORT   | 400    | 密碼長度不足             | 4     |
 | 5   | MSG_INVALID_LOGIN        | 401    | 使用者不存在、帳密有誤   | 1       |
-| 6   | MSG_INVALID_ACCESS_TOKEN | 401    | 無效的 Access Token      | 2,6,7   |
-| 7   | MSG_PERMISSION_DENY      | 403    | 權限不足                 | 6,7     |
+| 6   | MSG_INVALID_ACCESS_TOKEN | 401    | 無效的 Access Token      | 2, 6, 7   |
+| 7   | MSG_PERMISSION_DENY      | 403    | 權限不足                 | 6, 7     |
 
 ## API Endpoints
 
