@@ -153,13 +153,14 @@ class UserDetailAPI(Resource):
             return error
         if user.id != existsUser.id:
             return permission_deny()
-        if User.query.filter_by(email=data['email']).first():
-            return email_exists()
         
         data = request.get_json()
         name = data.get('name')
         email = data.get('email')
         password = data.get('password')
+
+        if email and User.query.filter_by(email=email).first():
+            return email_exists()
         
         updated_user = update_user(user, name, email, password)
         return success(updated_user.to_dict(), 201)
@@ -219,7 +220,7 @@ class AuthAPI(Resource):
               properties:
                 email:
                   type: string
-                  example: "user1@web.com"
+                  example: "user1@web.tw"
                 password:
                   type: string
                   example: "user1pass"
