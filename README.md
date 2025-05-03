@@ -4,24 +4,25 @@
 
 ## 專案結構
 ```
-│  .gitignore
-│  Dockerfile
-│  LICENSE
-│  README.md
-│  requirements.txt
-│
-└─src
-    │  apiResponse.py
-    │  app.py
-    │  controllers.py
-    │  models.py
-    │  seeder.py
-    │
-    └─templates
-            create.html
-            edit.html
-            index.html
-            login.html
+src/
+  ├── app.py (保持不變，作為入口點)
+  ├── config.py (新增，處理配置)
+  ├── models.py (保持不變)
+  ├── apiResponse.py (保持不變)
+  ├── seeder.py (保持不變)
+  ├── routes/
+  │   ├── __init__.py (註冊所有路由)
+  │   ├── web.py (網頁路由)
+  │   └── api.py (API 路由)
+  ├── controllers/
+  │   ├── __init__.py
+  │   ├── web_controllers.py (網頁控制器)
+  │   └── api_controllers.py (API 控制器)
+  ├── services/
+  │   ├── __init__.py
+  │   ├── auth_service.py (身份驗證相關功能)
+  │   └── user_service.py (用戶相關功能)
+  └── templates/ (保持不變)
 ```
 
 ## 安裝與運行
